@@ -24,9 +24,26 @@ apt-get update
 
 # install build dependencies for gem installation
 apt-get install -y gcc g++ patch make \
-  libc6-dev ruby2.1-dev zlib1g-dev libyaml-dev libssl-dev \
+  libc6-dev zlib1g-dev libyaml-dev libssl-dev \
   libgdbm-dev libreadline-dev libncurses5-dev libffi-dev \
   libxml2-dev libxslt-dev libcurl4-openssl-dev libicu-dev
+
+# install ruby
+curl http://cache.ruby-lang.org/pub/ruby/2.1/ruby-2.1.5.tar.gz | tar -xz
+cd ruby-2.1.5
+./configure --disable-install-doc
+make
+make install
+cd ..
+rm -rf ruby-2.1.5
+
+curl http://production.cf.rubygems.org/rubygems/rubygems-2.4.6.tgz | tar -xz
+cd rubygems-2.4.6
+ruby setup.rb
+cd ..
+rm -rf rubygems-2.4.6
+
+gem install --no-document bundler
 
 # install gems required by gitlab-ci-runner, use cache if available
 if [ -d "${GEM_CACHE_DIR}" ]; then
@@ -61,7 +78,7 @@ EOF
 
 # purge build dependencies
 apt-get purge -y --auto-remove gcc g++ patch make \
-  libc6-dev ruby2.1-dev zlib1g-dev libyaml-dev libssl-dev \
+  libc6-dev zlib1g-dev libyaml-dev libssl-dev \
   libgdbm-dev libreadline-dev libncurses5-dev libffi-dev \
   libxml2-dev libxslt-dev libcurl4-openssl-dev libicu-dev
 

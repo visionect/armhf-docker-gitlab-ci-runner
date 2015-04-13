@@ -17,7 +17,9 @@
 
 # Introduction
 
-Dockerfile to build a GitLab CI Runner base image. You can use this as the base image to build your own runner images. The [sameersbn/runner-gitlab](https://github.com/sameersbn/docker-runner-gitlab) project demonstrates its use to build a CI image for GitLab CE.
+Dockerfile to build a GitLab CI Runner base image on ARM systems. You can use this as the base image to build your own runner images. The [sameersbn/runner-gitlab](https://github.com/sameersbn/docker-runner-gitlab) project demonstrates its use to build a CI image for GitLab CE.
+
+This is a fork of [sameersbn/docker-gitlab-ci-runner](https://github.com/sameersbn/docker-gitlab-ci-runner) with modifications to run on ARMv7 systems such as Raspberry Pi 2.
 
 ## Version
 
@@ -50,7 +52,7 @@ sudo apt-get install lxc-docker
 
 Fedora and RHEL/CentOS users should try disabling selinux with `setenforce 0` and check if resolves the issue. If it does than there is not much that I can help you with. You can either stick with selinux disabled (not recommended by redhat) or switch to using ubuntu.
 
-If using the latest docker version and/or disabling selinux does not fix the issue then please file a issue request on the [issues](https://github.com/sameersbn/docker-gitlab-ci-runner/issues) page.
+If using the latest docker version and/or disabling selinux does not fix the issue then please file a issue request on the [issues](https://github.com/visionect/armhf-docker-gitlab-ci-runner/issues) page.
 
 In your issue report please make sure you provide the following information:
 
@@ -64,21 +66,21 @@ In your issue report please make sure you provide the following information:
 Pull the latest version of the image from the docker index. This is the recommended method of installation as it is easier to update image in the future. These builds are performed by the **Docker Trusted Build** service.
 
 ```bash
-docker pull sameersbn/gitlab-ci-runner:latest
+docker pull visionect/armhf-gitlab-ci-runner:latest
 ```
 
 Starting from GitLab CI Runner version `5.2.1`, You can pull a particular version of GitLab CI Runner by specifying the version number. For example,
 
 ```bash
-docker pull sameersbn/gitlab-ci-runner:5.2.1
+docker pull visionect/armhf-gitlab-ci-runner:5.2.1
 ```
 
 Alternately you can build the image yourself.
 
 ```bash
-git clone https://github.com/sameersbn/docker-gitlab-ci-runner.git
+git clone https://github.com/visionect/armhf-docker-gitlab-ci-runner.git
 cd docker-gitlab-ci-runner
-docker build --tag="$USER/gitlab-ci-runner" .
+docker build --tag="$USER/armhf-gitlab-ci-runner" .
 ```
 
 # Quick Start
@@ -89,7 +91,7 @@ For a runner to do its trick, it has to first be registered/authorized on the Gi
 mkdir -p /opt/gitlab-ci-runner
 docker run --name gitlab-ci-runner -it --rm \
 	-v /opt/gitlab-ci-runner:/home/gitlab_ci_runner/data \
-  sameersbn/gitlab-ci-runner:5.2.1 app:setup
+  visionect/armhf-gitlab-ci-runner:5.2.1 app:setup
 ```
 
 The command will prompt you to specify the location of the GitLab CI server and provide the registration token to access the server. With this out of the way the image is ready, lets get is started.
@@ -97,7 +99,7 @@ The command will prompt you to specify the location of the GitLab CI server and 
 ```bash
 docker run --name gitlab-ci-runner -it --rm \
 	-v /opt/gitlab-ci-runner:/home/gitlab_ci_runner/data \
-	sameersbn/gitlab-ci-runner:5.2.1
+	visionect/armhf-gitlab-ci-runner:5.2.1
 ```
 
 You now have a basic runner up and running. But in this form its more or less useless. See [sameersbn/runner-gitlab](https://github.com/sameersbn/docker-runner-gitlab) to understand how you can use this base image to build a runner for your own projects.
@@ -116,7 +118,7 @@ Volumes can be mounted in docker by specifying the **'-v'** option in the docker
 mkdir /opt/gitlab-ci-runner
 docker run --name gitlab-ci-runner -it --rm -h gitlab-ci-runner.local.host \
   -v /opt/gitlab-ci-runner:/home/gitlab_ci_runner/data \
-  sameersbn/gitlab-ci-runner:5.2.1
+  visionect/armhf-gitlab-ci-runner:5.2.1
 ```
 
 ## Installing Trusted SSL Server Certificates
@@ -178,10 +180,10 @@ For more information refer https://github.com/jpetazzo/nsenter
 To update the runner, simply stop the image and pull the latest version from the docker index.
 
 ```bash
-docker pull sameersbn/gitlab-ci-runner:5.2.1
+docker pull visionect/armhf-gitlab-ci-runner:5.2.1
 docker stop gitlab-ci-runner
 docker rm gitlab-ci-runner
-docker run --name gitlab-ci-runner -d [OPTIONS] sameersbn/gitlab-ci-runner:5.2.1
+docker run --name gitlab-ci-runner -d [OPTIONS] visionect/armhf-gitlab-ci-runner:5.2.1
 ```
 
 # References
